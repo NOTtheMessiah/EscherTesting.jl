@@ -33,13 +33,14 @@ class Form(unittest.TestCase):
         time.sleep(1)
 
         # need to replace this with mouse events instead of directly editing the Polymer properties
+        print("DEBUG: setting rating")
         myslider = driver.find_element_by_tag_name("paper-slider")
         driver.execute_script("document.getElementsByTagName('paper-slider')[0].value=5")
         driver.execute_script("document.getElementsByTagName('paper-slider')[0].fire('change')") # doesn't work in firefox
 
         driver.find_element_by_tag_name("paper-button").click()
-        time.sleep(1)
-        try: self.assertEqual("Dict{Any,Any}(:submit=>Escher.LeftButton(),:name=>\"\",:_trigger=>:submit,:rating=>5)", driver.find_element_by_css_selector("div.flow.vertical  > span").text)
+        time.sleep(5)
+        try: self.assertEqual(u'{:rating=>5,:submit=>LeftButton(),:_trigger=>:submit,:name=>""}', driver.find_element_by_css_selector("div.flow.vertical  > span").text)
         except AssertionError as e: self.verificationErrors.append(str(e))
 
     def test_name(self):
@@ -53,18 +54,20 @@ class Form(unittest.TestCase):
             except: pass
             time.sleep(1)
         else: self.fail("time out")
+        print("DEBUG: checking field")
         time.sleep(1)
         try: self.assertEqual("Dict{Any,Any}()", driver.find_element_by_css_selector("div.flow.vertical  > span").text)
         except AssertionError as e: self.verificationErrors.append(str(e))
 
-        myname = driver.find_element_by_id("name")
+        print("DEBUG: entering name")
+        myname = driver.find_element_by_id("input")
         myname.clear()
         myname.send_keys("John Doe")
         time.sleep(1)
 
         driver.find_element_by_tag_name("paper-button").click()
-        time.sleep(1)
-        try: self.assertEqual("Dict{Any,Any}(:submit=>Escher.LeftButton(),:name=>\"John Doe\",:_trigger=>:submit,:rating=>1)", driver.find_element_by_css_selector("div.flow.vertical  > span").text)
+        time.sleep(5)
+        try: self.assertEqual(u'{:rating=>1,:submit=>LeftButton(),:_trigger=>:submit,:name=>"John Doe"}', driver.find_element_by_css_selector("div.flow.vertical  > span").text)
         except AssertionError as e: self.verificationErrors.append(str(e))
 
     
