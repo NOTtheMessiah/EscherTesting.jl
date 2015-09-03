@@ -11,17 +11,29 @@ Selenium Test scripts and Utilities for Escher.jl
 
 ##### Project structure
 
-for each  ```$(JULIADIR)/example/<name>.jl``` there should be an associated ```test_<name>.py``` and ```test_<name>.jl```.  Each contains independent tests cases.
+for each  ```$(JULIADIR)/example/<name>.jl``` there should be an associated ```test_<name>.py``` and ```test_<name>.jl```.  Each contains several tests cases corresponding to the example.
 
-```runtests.jl``` will start a server and run each test file indepently. You may switch between python and julia by editing ```runPy :: Bool```.
+```runtests.jl``` will start a server and run each test file indepently. You may run the python test with the command-line option --py, 
 
 Tests are currently Chrome-only, and the Julia version uses PyCall
 
+##### Command line options
+
+```
+optional arguments:
+  -y, --py         Run python version of tests
+  -r, --noserve    Run tests without running the server (use if server
+                   is already running)
+  -p, --port PORT  Port to run the HTTP server on (type: Int64,
+                   default: 5555)
+  -h, --help       show this help message and exit
+```
+
 ##### Roadmap
 
-* Beautify output (via code restructuring or FactCheck.jl)
+* Beautify output (via terminal colors or FactCheck.jl)
 * If necessary, create Julia selenium bindings to WebDriver.
-* Make it easier to run
+* modularize julia tests so exception don't stop the script from running
 
 ##### Cross-platform tests
 
@@ -39,6 +51,7 @@ Each test file will perform independent tests via the python unittest module.
 * toolbar.jl
   - Check existence of tabs
   - Click on tabs and check update
+
 ### Incomplete 
 * minesweeper.jl
   - inject game board state via JS, and check clicking
