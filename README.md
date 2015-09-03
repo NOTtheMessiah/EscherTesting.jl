@@ -7,11 +7,21 @@ Selenium Test scripts and Utilities for Escher.jl
 * [Selenium Server Standalone](http://seleniumhq.org/)
 * [Python binding for Selenium Remote Control](http://pypi.python.org/pypi/selenium)
 * Web Browser with a WebDriver implementation (defaults to [Chromium](http://www.chromium.org/))
+* Julia packages: Escher, Compat, [PyCall](https://github.com/stevengj/PyCall.jl)
 
 ##### Project structure
 
-for each  ```$(JULIADIR)/example/<name>.jl``` there should be an associated ```test_<name>.py```.  Each contains independent tests cases 
-Initially, tests will be in Python and Chrome-only, but will be ported to either use PyCall or call WebDriver directly within Julia, and will be cross-platform (in that you can choose which browser to run the tests in from the command line).
+for each  ```$(JULIADIR)/example/<name>.jl``` there should be an associated ```test_<name>.py``` and ```test_<name>.jl```.  Each contains independent tests cases.
+
+```runtests.jl``` will start a server and run each test file indepently. You may switch between python and julia by editing ```runPy :: Bool```.
+
+Tests are currently Chrome-only, and the Julia version uses PyCall
+
+##### Roadmap
+
+* Beautify output (via code restructuring or FactCheck.jl)
+* If necessary, create Julia selenium bindings to WebDriver.
+* Make it easier to run
 
 ##### Cross-platform tests
 
@@ -26,7 +36,10 @@ Each test file will perform independent tests via the python unittest module.
   - Input rating and check
 * layout.jl
   - Check if the first vertical flow is square (height == width)
-### Future
+* toolbar.jl
+  - Check existence of tabs
+  - Click on tabs and check update
+### Incomplete 
 * minesweeper.jl
   - inject game board state via JS, and check clicking
 * tex.jl
