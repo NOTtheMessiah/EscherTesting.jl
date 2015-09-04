@@ -20,10 +20,16 @@ Tests are currently Chrome-only, and the Julia version uses PyCall
 ##### Command line options
 
 ```
+usage: runtests.jl [-y] [-s] [-p PORT] [-h] [files...]
+
+positional arguments:
+  files            list of files to run tests on, will look for
+                   run_<filename>.jl in current dir for each test
+                   (default: ASCIIString["form","layout","toolbar"])
+
 optional arguments:
   -y, --py         Run python version of tests
-  -r, --noserve    Run tests without running the server (use if server
-                   is already running)
+  -s, --serve      Serve examples folder before running tests
   -p, --port PORT  Port to run the HTTP server on (type: Int64,
                    default: 5555)
   -h, --help       show this help message and exit

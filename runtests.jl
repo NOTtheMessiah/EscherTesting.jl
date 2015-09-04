@@ -5,19 +5,15 @@ using Escher
 
 include(Pkg.dir("Escher", "src", "cli", "serve.jl"))
 
-python = ("/usr/bin/python2")
-runPy = false
-examples = ["form", "layout", "toolbar" ]
-
 function startServer(port)
     println("serving $(Pkg.dir("Escher","examples"))")
     @async escher_serve(port,Pkg.dir("Escher","examples"))
 end
 
-function runTests(runPy)
+function runTests(examples,runPy=false)
     for ex in examples
         println("running test_$(ex).$(runPy ? "py":"jl")" )
-        try run(`$(runPy ? python:"julia") test_$(ex).$(runPy ? "py":"jl")`)
+        try run(`$(runPy ? "python2":"julia") test_$(ex).$(runPy ? "py":"jl")`)
         end
     end
 end
@@ -28,13 +24,18 @@ parseCommandline() = begin
         "--py", "-y"
             help = "Run python version of tests"
             action = :store_true
-        "--noserve", "-r"
-            help = "Run tests without starting the server"
+        "--serve", "-s"
+            help = "Serve examples folder before running tests"
             action = :store_true
         "--port", "-p"
             help = "Port to run the HTTP server on"
             arg_type = Int
             default = 5555
+        "files"
+            help = "list of files to run tests on, will look for run_<filename>.jl in current dir for each test"
+            nargs = '*'
+            arg_type = String
+            default = ["form", "layout", "toolbar"]
     end
     parse_args(s)
 end
@@ -42,10 +43,10 @@ end
 
 function main() 
     parsedArgs = parseCommandline()
-    if !parsedArgs["noserve"]
+    if parsedArgs["serve"]
         escherServer = startServer(parsedArgs["port"])
     end
-    runTests(parsedArgs["py"])
+    runTests(parsedArgs["files"],parsedArgs["py"])
 end
 
 main()
