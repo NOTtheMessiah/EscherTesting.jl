@@ -10,10 +10,15 @@ function startServer(port)
     @async escher_serve(port,Pkg.dir("Escher","examples"))
 end
 
-function runTests(examples,runPy=false)
+function runTests(examples,driver="Chrome",runPy=false)
     for ex in examples
         println("running test_$(ex).$(runPy ? "py":"jl")" )
-        try run(`$(runPy ? "python2":"julia") test_$(ex).$(runPy ? "py":"jl")`)
+        if runPy
+            try run(`python2 test_$(ex).py`)
+            end
+        else
+            try run(`julia test_$(ex).jl $(driver)`)
+            end
         end
     end
 end
@@ -27,6 +32,10 @@ parseCommandline() = begin
         "--serve", "-s"
             help = "Serve examples folder before running tests"
             action = :store_true
+        "--driver", "-d"
+            help = "Driver (Browser) to use, case-sensitive"
+            arg_type = String
+            default = "Chrome"
         "--port", "-p"
             help = "Port to run the HTTP server on"
             arg_type = Int
@@ -46,7 +55,7 @@ function main()
     if parsedArgs["serve"]
         escherServer = startServer(parsedArgs["port"])
     end
-    runTests(parsedArgs["files"],parsedArgs["py"])
+    runTests(parsedArgs["files"],parsedArgs["driver"],parsedArgs["py"])
 end
 
 main()

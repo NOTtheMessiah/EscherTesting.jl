@@ -30,6 +30,7 @@ positional arguments:
 optional arguments:
   -y, --py         Run python version of tests
   -s, --serve      Serve examples folder before running tests
+  -d, --driver     Driver (Browser) to use. (case-sensitive) (type: String)
   -p, --port PORT  Port to run the HTTP server on (type: Int64,
                    default: 5555)
   -h, --help       show this help message and exit
