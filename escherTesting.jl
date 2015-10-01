@@ -1,5 +1,6 @@
 using PyCall
 using Base.Test
+using FactCheck
 
 @pyimport selenium.webdriver as webdriver
 
@@ -16,7 +17,7 @@ end
 
 serverAddress = "http://localhost:5555/"
 
-openPage(s) = driver[:get]("$(serverAddress)$(s)")
+openPage(s,serverAddress=serverAddress) = driver[:get]("$(serverAddress)$(s)")
 
 function waitUntilElementLoads(how::Symbol,element::String,patience::Int) 
     for i=1:patience

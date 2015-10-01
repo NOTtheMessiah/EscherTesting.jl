@@ -15,7 +15,7 @@ for each  ```$(JULIADIR)/example/<name>.jl``` there should be an associated ```t
 
 ```runtests.jl``` will start a server and run each test file indepently. You may run the python test with the command-line option --py, 
 
-Tests are currently Chrome-only, and the Julia version uses PyCall
+As of now the Julia version uses PyCall, but Selenium bindings may be used in the near future
 
 ##### Command line options
 
@@ -31,6 +31,7 @@ optional arguments:
   -y, --py         Run python version of tests
   -s, --serve      Serve examples folder before running tests
   -d, --driver     Driver (Browser) to use. (case-sensitive) (type: String)
+                   Supported options: Firefox, Chrome
   -p, --port PORT  Port to run the HTTP server on (type: Int64,
                    default: 5555)
   -h, --help       show this help message and exit
@@ -38,32 +39,11 @@ optional arguments:
 
 ##### Roadmap
 
-* Beautify output (via terminal colors or FactCheck.jl)
-* If necessary, create Julia selenium bindings to WebDriver.
-* modularize julia tests so exception don't stop the script from running
-
-##### Cross-platform tests
-
-For use of Firefox or Safari (or any other supported browser), replace ```driver = webdriver.Chrome()``` with the respective webdriver. As of now, Firefox has limited support for WebComponents, as the polyfills are not complete. 
-
-# Test Cases
-Each test file will perform independent tests via the python unittest module.
-
-### Completed
-* form.jl 
-  - Input name and check
-  - Input rating and check
-* layout.jl
-  - Check if the first vertical flow is square (height == width)
-* toolbar.jl
-  - Check existence of tabs
-  - Click on tabs and check update
-
-### Incomplete 
-* minesweeper.jl
-  - inject game board state via JS, and check clicking
-* tex.jl
-  - Check to see if it outputs TeX
+* fix scope by putting tests into modules
+* create Julia selenium bindings to WebDriver (low priority)
+* inline-tests
+* Travis-CI
+* use XvfbWrapper.jl
 
 # External References
 
