@@ -1,9 +1,16 @@
 #! /usr/bin/env julia
 
 using ArgParse
-using Escher
+using Requires
+if !( "--help" in ARGS || "-h" in ARGS )
+    using Escher
+    if ( "--xvfb" in ARGS || "-x" in ARGS )
+        using XvfbWrapper
+    end
 
-include(Pkg.dir("Escher", "src", "cli", "serve.jl"))
+    include(Pkg.dir("Escher", "src", "cli", "serve.jl"))
+end
+
 
 function startServer(port)
     println("serving $(Pkg.dir("Escher","examples"))")
@@ -17,7 +24,7 @@ function runTests(examples,driver="Chrome",runPy=false)
             try run(`python2 test_$(ex).py`)
             end
         else
-            try run(`julia test_$(ex).jl $(driver)`)
+            try run(`julia --color=yes test_$(ex).jl $(driver)`)
             end
         end
     end
@@ -26,6 +33,9 @@ end
 parseCommandline() = begin
     s = ArgParseSettings(description = "This program runs Selenium tests on a list of Escher examples")
     @add_arg_table s begin
+        "--xvfb", "-x"
+            help = "Run browser in a virtual framebuffer (Requires XvfbWrapper.jl)"
+            action = :store_true
         "--py", "-y"
             help = "Run python version of tests"
             action = :store_true
@@ -34,7 +44,7 @@ parseCommandline() = begin
             action = :store_true
         "--driver", "-d"
             help = "Driver (Browser) to use, case-sensitive"
-            arg_type = String
+            arg_type = AbstractString
             default = "Chrome"
         "--port", "-p"
             help = "Port to run the HTTP server on"
@@ -43,7 +53,7 @@ parseCommandline() = begin
         "files"
             help = "list of files to run tests on, will look for run_<filename>.jl in current dir for each test"
             nargs = '*'
-            arg_type = String
+            arg_type = AbstractString
             default = ["form", "recursive-layout", "layout2"]
     end
     parse_args(s)
@@ -52,10 +62,17 @@ end
 
 function main() 
     parsedArgs = parseCommandline()
+    # @require XvfbWrapper begin
+    if parsedArgs["xvfb"] 
+        fb = Xvfb()
+        start!(fb)
+    end
+    # end
     if parsedArgs["serve"]
         escherServer = startServer(parsedArgs["port"])
     end
     runTests(parsedArgs["files"],parsedArgs["driver"],parsedArgs["py"])
+    if parsedArgs["xvfb"] stop!(fb) end
 end
 
 main()

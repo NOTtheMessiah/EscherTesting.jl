@@ -20,21 +20,27 @@ As of now the Julia version uses PyCall, but Selenium bindings may be used in th
 ##### Command line options
 
 ```
-usage: runtests.jl [-y] [-s] [-p PORT] [-h] [files...]
+usage: runtests.jl [-x] [-y] [-s] [-d DRIVER] [-p PORT] [-h]
+                   [files...]
+
+This program runs Selenium tests on a list of Escher examples
 
 positional arguments:
-  files            list of files to run tests on, will look for
-                   run_<filename>.jl in current dir for each test
-                   (default: ASCIIString["form","layout","toolbar"])
+  files                list of files to run tests on, will look for
+                       run_<filename>.jl in current dir for each test
+                       (default:
+                       ASCIIString["form","recursive-layout","layout2"])
 
 optional arguments:
-  -y, --py         Run python version of tests
-  -s, --serve      Serve examples folder before running tests
-  -d, --driver     Driver (Browser) to use. (case-sensitive) (type: String)
-                   Supported options: Firefox, Chrome
-  -p, --port PORT  Port to run the HTTP server on (type: Int64,
-                   default: 5555)
-  -h, --help       show this help message and exit
+  -x, --xvfb           Run browser in a virtual framebuffer (Requires
+                       XvfbWrapper.jl)
+  -y, --py             Run python version of tests
+  -s, --serve          Serve examples folder before running tests
+  -d, --driver DRIVER  Driver (Browser) to use, case-sensitive
+                       (default: "Chrome")
+  -p, --port PORT      Port to run the HTTP server on (type: Int64,
+                       default: 5555)
+  -h, --help           show this help message and exit
 ```
 
 ##### Roadmap
@@ -43,7 +49,6 @@ optional arguments:
 * create Julia selenium bindings to WebDriver (low priority)
 * inline-tests
 * Travis-CI
-* use XvfbWrapper.jl
 
 # External References
 
