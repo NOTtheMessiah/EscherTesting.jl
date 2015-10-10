@@ -54,7 +54,7 @@ parseCommandline() = begin
             help = "list of files to run tests on, will look for run_<filename>.jl in current dir for each test"
             nargs = '*'
             arg_type = AbstractString
-            default = ["form", "recursive-layout", "layout2"]
+            default = ["form", "recursive-layout", "layout2", "minesweeper", "plotting", "keypress", "vectorgraphics"]
     end
     parse_args(s)
 end
